@@ -35,11 +35,12 @@ var connection = mysql.createConnection({
 connection.connect();
 
 
-var query = function () {
+var query = function (sql) {
   var promise = new Promise(function (resolve, reject) {
 
   connection.query(
-      "SELECT * FROM task",
+      //"SELECT * FROM task",
+      sql,
       function selectCb(err, results) {
           if (results) {
               //console.log(results);
@@ -64,9 +65,22 @@ var query = function () {
 };
 
 
-var insert=function(id,name,worker,customer,flag,price,sort,date,info,status){
+var insert=function(id,name,worker,customer,flag,price,sort,date,info,img,nickname,phone,address,status){
   var  sql = "INSERT INTO task VALUES ("+id+", "+name+", "+worker+", "+customer+", "+flag+", "
-  +price+", "+sort+", "+date+", "+info+", "+status+")";
+  +price+", "+sort+", "+date+", "+info+", "+img+", "+nickname+", "+phone+", "+address+", "+status+")";
+  connection.query(sql,function (err, result) {
+        if(err){
+          console.log('[SELECT ERROR] - ',err.message);
+          return;
+        }
+       console.log(result);
+       console.log('------------------------------------------------------------\n\n');  
+});
+}
+
+
+var insertInfo=function(userid, nickname, phone, address){
+  var  sql = "INSERT INTO user VALUES ("+userid+", "+nickname+", "+phone+", "+address+")";
   connection.query(sql,function (err, result) {
         if(err){
           console.log('[SELECT ERROR] - ',err.message);
@@ -79,3 +93,4 @@ var insert=function(id,name,worker,customer,flag,price,sort,date,info,status){
 
 exports.query=query;
 exports.insert=insert;
+exports.insertInfo=insertInfo;
