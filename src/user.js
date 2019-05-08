@@ -27,8 +27,10 @@ hello.create(router);
 
 //设置最大文件限制
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+
 //添加上传图片接口
 Img.uploadImg(router, urlencodedParser);
+//Img.uploadAva(router, urlencodedParser);
 
 router.get("/getMessage",function(req,res){
 
@@ -44,12 +46,62 @@ router.get("/getMessage",function(req,res){
 });
 
 
+function dealWithData(){
+    /*
+    let c = [];
+     let d = {};
+     data.forEach(element => {
+        if(!d[element.sort]){
+            c.push({
+                sort: element.sort,
+                allData: [element]
+            });
+            d[element.sort] = element;
+        }else{
+            c.forEach(ele => {
+                if(ele.sort == element.sort){
+                    ele.allData.push(element);
+                }
+            });
+         }
+                  
+   });
+    return c;*/
 
+    var wang = [{g: 1, c:"aa"}, {g: 1, c: "bb"}, {g: 4, c: "cc"}, {g: 2, c: "dd"}, {g: 2, c:"ee"}, 
+    {g: 2, c: "ff"}, {g: 3, c: "gg"}];
+
+    //提取所有g值得数组
+    var xxx = wang.map(function(item) {
+        return item.g;
+    });
+    console.log("xxx: ",xxx);
+
+    //返回去重之后的数组。
+    var yyy = [];
+    xxx.forEach(function(item) {
+        !(yyy.indexOf(item) > -1) && yyy.push(item)
+    });
+    console.log("yyy: ",yyy);
+
+    var zzz = [];
+    yyy.forEach(function(item) {
+        //每次循环都会分组，分好的组分别push到zzz
+        zzz.push(wang.filter(function(apItem) {
+            return apItem.g == item;
+        }));
+    });
+    console.log("zzz: ",zzz);
+  }
+  
+  
 
 router.get("/sql",function(req,res){
-
-    service.query().then(data=>{
-        //console.log(data);
+    let sql="select * from task where flag=0";
+    service.query(sql).then(data=>{
+        //console.log(dealWithData(data));
+        dealWithData();
+        console.log(data);
         res.send(data);
     })
 
@@ -62,11 +114,8 @@ router.post("/post",urlencodedParser,function(req,res){
     res.send(String(num));
 });
 
-router.post("/upload",urlencodedParser,function(req,res){
 
-    console.log(req.body);
 
-});
 
 
 //发布任务接口
@@ -85,6 +134,8 @@ router.post("/postTask",urlencodedParser,function(req,res){
     let nickname='"'+req.body.nickname+'"';
     let phone='"'+req.body.phone+'"';
     let address='"'+req.body.address+'"';
+    let avatar='"'+req.body.avatar+'"';
+
     let account=jHandler.id2Account(req.body.worker);
 
     //account="0x0302f4512E02b7DF7259fFb373ecfEdfD50DB80E";
@@ -93,7 +144,7 @@ router.post("/postTask",urlencodedParser,function(req,res){
         console.log(parseInt(data));
         account='"'+account+'"';  
         service.insert(parseInt(data),name,account,account,flag,price,sort,
-        date,info,img,nickname,phone,address,0);
+        date,info,img,nickname,phone,address,avatar,0);
     });
     console.log(account);
     res.send(account);

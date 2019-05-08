@@ -49,7 +49,7 @@ var query = function (sql) {
           if (err) {
               console.log(err);
           }
-          connection.end();
+          //connection.end();
       }
     );
   });
@@ -65,9 +65,10 @@ var query = function (sql) {
 };
 
 
-var insert=function(id,name,worker,customer,flag,price,sort,date,info,img,nickname,phone,address,status){
+var insert=function(id,name,worker,customer,flag,price,sort,date,info,img,nickname,phone,address,avatar,status){
   var  sql = "INSERT INTO task VALUES ("+id+", "+name+", "+worker+", "+customer+", "+flag+", "
-  +price+", "+sort+", "+date+", "+info+", "+img+", "+nickname+", "+phone+", "+address+", "+status+")";
+  +price+", "+sort+", "+date+", "+info+", "+img+", "+nickname+", "+phone+", "
+  +address+", "+avatar+", "+status+")";
   connection.query(sql,function (err, result) {
         if(err){
           console.log('[SELECT ERROR] - ',err.message);

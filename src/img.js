@@ -11,7 +11,7 @@ var bodyParser = require('body-parser');
 
 var port    = process.env.PORT || 8080;
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
-
+var jHandler=require("./jsonHandler");
 
 
 //设置最大文件限制
@@ -27,6 +27,7 @@ Img={
       var dataBuffer = new Buffer(base64Data, 'base64');
       var filename=`${Date.now()}_${Math.ceil(Math.random() * 1000)}`+'.png';
       fs.writeFile('../img/'+filename, dataBuffer, function(err) {
+        //fs.writeFile('C:/Users/alex/Desktop/微信小程序/wxapp-mall-master/img/'+filename, dataBuffer, function(err) {
           if(err){
               console.log(err);
             res.send(err);
@@ -35,7 +36,26 @@ Img={
           }
       });
     });
-  }
+  },
+
+  uploadAva: function(router, urlencodedParser){
+    router.post('/downloadAva',urlencodedParser,function(req, res){
+    //接收前台POST过来的base64
+    var base64Data = req.body.imgData;
+    var dataBuffer = new Buffer(base64Data, 'base64');
+    let account=jHandler.id2Account(req.body.id);
+    account='"'+account+'"';  
+    var filename=account+'.png';
+    fs.writeFile('../img/'+filename, dataBuffer, function(err) {
+        if(err){
+            console.log(err);
+          res.send(err);
+        }else{
+          res.send(filename);
+        }
+    });
+  });
+}
 }
 
 
