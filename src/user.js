@@ -45,31 +45,10 @@ router.get("/getMessage",function(req,res){
 
 });
 
-
-function dealWithData(){
-    /*
-    let c = [];
-     let d = {};
-     data.forEach(element => {
-        if(!d[element.sort]){
-            c.push({
-                sort: element.sort,
-                allData: [element]
-            });
-            d[element.sort] = element;
-        }else{
-            c.forEach(ele => {
-                if(ele.sort == element.sort){
-                    ele.allData.push(element);
-                }
-            });
-         }
-                  
-   });
-    return c;*/
-
     var wang = [{g: 1, c:"aa"}, {g: 1, c: "bb"}, {g: 4, c: "cc"}, {g: 2, c: "dd"}, {g: 2, c:"ee"}, 
     {g: 2, c: "ff"}, {g: 3, c: "gg"}];
+
+function dealWithData(wang){
 
     //提取所有g值得数组
     var xxx = wang.map(function(item) {
@@ -96,12 +75,17 @@ function dealWithData(){
   
   
 
-router.get("/sql",function(req,res){
-    let sql="select * from task where flag=0";
+router.post("/sql", urlencodedParser, function(req,res){
+    let sort='"'+req.body.sort+'"';
+    let sql="select * from task where flag=0"+" and sort="+sort;
+    console.log(req.body.sort);
+    //sql="select * from task where flag=0 and sort='保洁清洗'";
     service.query(sql).then(data=>{
         //console.log(dealWithData(data));
-        dealWithData();
-        console.log(data);
+        //dealWithData(wang);
+        //data = JSON.stringify(data);
+        //data = JSON.parse(data);
+        //console.log(data);
         res.send(data);
     })
 
