@@ -65,10 +65,10 @@ var query = function (sql) {
 };
 
 
-var insert=function(id,name,worker,customer,flag,price,sort,date,info,img,nickname,phone,address,avatar,status){
+var insert=function(id,name,worker,customer,flag,price,sort,date,info,img,nickname,phone,address,avatar,status, index){
   var  sql = "INSERT INTO task VALUES ("+id+", "+name+", "+worker+", "+customer+", "+flag+", "
   +price+", "+sort+", "+date+", "+info+", "+img+", "+nickname+", "+phone+", "
-  +address+", "+avatar+", "+status+")";
+  +address+", "+avatar+", "+status+", "+index+")";
   connection.query(sql,function (err, result) {
         if(err){
           console.log('[SELECT ERROR] - ',err.message);

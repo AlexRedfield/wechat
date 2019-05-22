@@ -45,34 +45,7 @@ router.get("/getMessage",function(req,res){
 
 });
 
-    var wang = [{g: 1, c:"aa"}, {g: 1, c: "bb"}, {g: 4, c: "cc"}, {g: 2, c: "dd"}, {g: 2, c:"ee"}, 
-    {g: 2, c: "ff"}, {g: 3, c: "gg"}];
 
-function dealWithData(wang){
-
-    //提取所有g值得数组
-    var xxx = wang.map(function(item) {
-        return item.g;
-    });
-    console.log("xxx: ",xxx);
-
-    //返回去重之后的数组。
-    var yyy = [];
-    xxx.forEach(function(item) {
-        !(yyy.indexOf(item) > -1) && yyy.push(item)
-    });
-    console.log("yyy: ",yyy);
-
-    var zzz = [];
-    yyy.forEach(function(item) {
-        //每次循环都会分组，分好的组分别push到zzz
-        zzz.push(wang.filter(function(apItem) {
-            return apItem.g == item;
-        }));
-    });
-    console.log("zzz: ",zzz);
-  }
-  
   
 
 router.post("/sql", urlencodedParser, function(req,res){
@@ -100,8 +73,6 @@ router.post("/post",urlencodedParser,function(req,res){
 
 
 
-
-
 //发布任务接口
 router.post("/postTask",urlencodedParser,function(req,res){
     console.log(req.body);
@@ -121,14 +92,14 @@ router.post("/postTask",urlencodedParser,function(req,res){
     let avatar='"'+req.body.avatar+'"';
 
     let account=jHandler.id2Account(req.body.worker);
-
+    let index='"'+`${Date.now()}_${Math.ceil(Math.random() * 1000)}`+'"';
     //account="0x0302f4512E02b7DF7259fFb373ecfEdfD50DB80E";
     //Task.addTask(account,name,flag,price,sort,date,info);
     Task.getTaskLen(account).then(data=>{
         console.log(parseInt(data));
         account='"'+account+'"';  
         service.insert(parseInt(data),name,account,account,flag,price,sort,
-        date,info,img,nickname,phone,address,avatar,0);
+        date,info,img,nickname,phone,address,avatar,0,index);
     });
     console.log(account);
     res.send(account);
