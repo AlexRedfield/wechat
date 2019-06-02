@@ -16,7 +16,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 var jHandler=require("./jsonHandler");
 
 var service = require("../mysql/test");
-
+var transfer=require('./transfer');
 //_app.initWeb3();
 //_app.readNote();
 
@@ -46,12 +46,11 @@ router.get("/getMessage",function(req,res){
 });
 
 
-  
 
 router.post("/sql", urlencodedParser, function(req,res){
     let sort='"'+req.body.sort+'"';
     let sql="select * from task where flag=0"+" and sort="+sort;
-    console.log(req.body.sort);
+    //console.log(req.body.sort);
     //sql="select * from task where flag=0 and sort='保洁清洗'";
     service.query(sql).then(data=>{
         //console.log(dealWithData(data));
@@ -62,6 +61,23 @@ router.post("/sql", urlencodedParser, function(req,res){
         res.send(data);
     })
 
+});
+
+//开放预约接口
+router.post("/order", urlencodedParser, function(req,res){
+    console.log(req.body);
+    let date=parseInt(req.body.date);
+    let customer=jHandler.id2Account(req.body.customer);
+    customer='"'+customer+'"';  
+    let address='"'+req.body.address+'"';
+    let flag=parseInt(req.body.flag);
+    let index='"'+req.body.index+'"';
+    let status=1;
+
+    service.changeStatus(index, date, address, flag, customer, status);
+    res.send("success");
+    let admin='0x0302f4512E02b7DF7259fFb373ecfEdfD50DB80E';
+    transfer.trans(customer,admin,'5');
 });
 
 router.post("/post",urlencodedParser,function(req,res){

@@ -79,6 +79,27 @@ var insert=function(id,name,worker,customer,flag,price,sort,date,info,img,nickna
 });
 }
 
+//修改服务状态
+var changeStatus=function(index, date, address, flag, customer, status){
+  if(flag=="1"){
+      var sql="UPDATE task SET date="+date+", address="+address+", worker="+customer+
+      ", status="+status+" WHERE  index="+index;
+  }
+  else{
+    var sql="UPDATE task SET date="+date+", address="+address+", customer="+customer+
+    ", status="+status+" WHERE  whatever="+index;
+  }
+  connection.query(sql,function (err, result) {
+    if(err){
+      console.log(sql);
+      console.log('[SELECT ERROR] - ',err.message);
+      return;
+    }
+   console.log(result);
+   console.log('------------------------------------------------------------\n\n');  
+});
+
+}
 
 var insertInfo=function(userid, nickname, phone, address){
   var  sql = "INSERT INTO user VALUES ("+userid+", "+nickname+", "+phone+", "+address+")";
@@ -92,6 +113,7 @@ var insertInfo=function(userid, nickname, phone, address){
 });
 }
 
+exports.changeStatus=changeStatus;
 exports.query=query;
 exports.insert=insert;
 exports.insertInfo=insertInfo;
