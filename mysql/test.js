@@ -83,12 +83,29 @@ var insert=function(id,name,worker,customer,flag,price,sort,date,info,img,nickna
 var changeStatus=function(index, date, address, flag, customer, status){
   if(flag=="1"){
       var sql="UPDATE task SET date="+date+", address="+address+", worker="+customer+
-      ", status="+status+" WHERE  index="+index;
+      ", status="+status+" WHERE  whatever="+index;
   }
   else{
     var sql="UPDATE task SET date="+date+", address="+address+", customer="+customer+
     ", status="+status+" WHERE  whatever="+index;
   }
+  connection.query(sql,function (err, result) {
+    if(err){
+      console.log(sql);
+      console.log('[SELECT ERROR] - ',err.message);
+      return;
+    }
+   console.log(result);
+   console.log('------------------------------------------------------------\n\n');  
+});
+
+}
+
+//服务完成
+var onlyChangeStatus=function(index, status){
+
+  var sql="UPDATE task SET status="+status+" WHERE  whatever="+index;
+
   connection.query(sql,function (err, result) {
     if(err){
       console.log(sql);
@@ -117,3 +134,4 @@ exports.changeStatus=changeStatus;
 exports.query=query;
 exports.insert=insert;
 exports.insertInfo=insertInfo;
+exports.onlyChangeStatus=onlyChangeStatus;
